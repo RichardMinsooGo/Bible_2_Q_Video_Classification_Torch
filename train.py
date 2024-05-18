@@ -18,7 +18,7 @@ from network import C3D_model, R2Plus1D_model, R3D_model
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 print("Device being used:", device)
 
-nEpochs       = 100    # Number of epochs for training
+nEpochs       = 20    # Number of epochs for training
 resume_epoch  = 0      # Default is 0, change if want to resume
 useTest       = True  # See evolution of the test set when training
 nTestInterval = 20     # Run on test set every nTestInterval epochs
@@ -46,7 +46,7 @@ else:
     run_id = int(runs[-1].split('_')[-1]) + 1 if runs else 0
 
 save_dir = os.path.join(save_dir_root, 'run', 'run_' + str(run_id))
-modelName = 'C3D' # Options: C3D or R2Plus1D or R3D
+modelName = 'R2Plus1D' # Options: C3D or R2Plus1D or R3D
 saveName = modelName + '-' + dataset
 
 def train_model(dataset=dataset, save_dir=save_dir, num_classes=num_classes, lr=lr,
@@ -95,9 +95,9 @@ def train_model(dataset=dataset, save_dir=save_dir, num_classes=num_classes, lr=
 
     
     print('Training model on {} dataset...'.format(dataset))
-    train_dataloader = DataLoader(VideoDataset(dataset=dataset, split='train',clip_len=16, preprocess=False), batch_size=80, shuffle=True, num_workers=4)
-    val_dataloader   = DataLoader(VideoDataset(dataset=dataset, split='val',  clip_len=16, preprocess=False), batch_size=80, num_workers=4)
-    test_dataloader  = DataLoader(VideoDataset(dataset=dataset, split='test', clip_len=16, preprocess=False), batch_size=880, num_workers=4)
+    train_dataloader = DataLoader(VideoDataset(dataset=dataset, split='train',clip_len=16, preprocess=False), batch_size=64, shuffle=True, num_workers=4)
+    val_dataloader   = DataLoader(VideoDataset(dataset=dataset, split='val',  clip_len=16, preprocess=False), batch_size=64, num_workers=4)
+    test_dataloader  = DataLoader(VideoDataset(dataset=dataset, split='test', clip_len=16, preprocess=False), batch_size=64, num_workers=4)
 
     trainval_loaders = {'train': train_dataloader, 'val': val_dataloader}
     trainval_sizes = {x: len(trainval_loaders[x].dataset) for x in ['train', 'val']}
